@@ -1,0 +1,94 @@
+"use client";
+
+import Link from "next/link";
+import { siteConfig } from "@/site-config";
+import { Phone, MessageCircle, Menu, ChevronDown } from "lucide-react";
+import { useState } from "react";
+
+export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+
+  const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsappNumber}?text=${encodeURIComponent("Hi TotalAsset, I would like to know more about your services.")}`;
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--color-divider)] bg-[var(--color-background)]/80 backdrop-blur-md">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-[var(--color-primary)] text-[var(--color-accent)] rounded flex items-center justify-center font-bold text-xl">
+            TA
+          </div>
+          <span className="font-bold text-xl text-[var(--color-primary)] tracking-tight">
+            {siteConfig.brand.name}
+          </span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          <Link href="/" className="text-[var(--color-muted)] hover:text-[var(--color-primary)] font-medium transition-colors">Home</Link>
+          
+          {/* Services Dropdown */}
+          <div 
+            className="relative group cursor-pointer"
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            <div className="flex items-center gap-1 text-[var(--color-muted)] hover:text-[var(--color-primary)] font-medium transition-colors py-2">
+              Services <ChevronDown className="w-4 h-4" />
+            </div>
+            
+            {servicesOpen && (
+              <div className="absolute top-full left-0 w-64 bg-white shadow-lg border border-[var(--color-divider)] rounded-md py-2 flex flex-col z-50">
+                <Link href="/services/flat-management" className="px-4 py-2 hover:bg-[var(--color-background)] text-[var(--color-foreground)] transition-colors">Flat Management</Link>
+                <Link href="/services/apartment-management" className="px-4 py-2 hover:bg-[var(--color-background)] text-[var(--color-foreground)] transition-colors">Apartment Management</Link>
+                <Link href="/services/villa-farmhouse" className="px-4 py-2 hover:bg-[var(--color-background)] text-[var(--color-foreground)] transition-colors">Villa & Farmhouse</Link>
+                <Link href="/services/plot-land-management" className="px-4 py-2 hover:bg-[var(--color-background)] text-[var(--color-foreground)] transition-colors">Plot / Land Management</Link>
+                <Link href="/services/commercial-property" className="px-4 py-2 hover:bg-[var(--color-background)] text-[var(--color-foreground)] transition-colors">Commercial Property</Link>
+              </div>
+            )}
+          </div>
+
+          <Link href="/about" className="text-[var(--color-muted)] hover:text-[var(--color-primary)] font-medium transition-colors">About Us</Link>
+          <Link href="/contact" className="text-[var(--color-muted)] hover:text-[var(--color-primary)] font-medium transition-colors">Contact</Link>
+          
+          <div className="flex items-center gap-4 ml-4">
+            <a href={`tel:${siteConfig.contact.phone}`} className="bg-[var(--color-accent)] text-white px-5 py-2.5 rounded-md font-semibold flex items-center gap-2 hover:bg-[var(--color-accent)]/90 transition-colors">
+              <Phone className="w-5 h-5" />
+              Call Us
+            </a>
+          </div>
+        </nav>
+
+        {/* Mobile Menu Toggle */}
+        <button className="md:hidden p-2 text-[var(--color-primary)]" onClick={() => setIsOpen(!isOpen)}>
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+      
+      {/* Mobile Nav */}
+      {isOpen && (
+        <div className="md:hidden border-t border-[var(--color-divider)] bg-[var(--color-background)] p-4 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
+          <Link href="/" className="text-[var(--color-primary)] font-medium" onClick={() => setIsOpen(false)}>Home</Link>
+          
+          <div className="flex flex-col gap-2">
+            <span className="text-[var(--color-primary)] font-medium flex items-center justify-between" onClick={() => setServicesOpen(!servicesOpen)}>
+              Services <ChevronDown className={`w-4 h-4 transition-transform ${servicesOpen ? "rotate-180" : ""}`} />
+            </span>
+            {servicesOpen && (
+              <div className="flex flex-col gap-2 pl-4 border-l-2 border-[var(--color-divider)] ml-2">
+                <Link href="/services/flat-management" className="text-[var(--color-muted)] text-sm py-1" onClick={() => setIsOpen(false)}>Flat Management</Link>
+                <Link href="/services/apartment-management" className="text-[var(--color-muted)] text-sm py-1" onClick={() => setIsOpen(false)}>Apartment Management</Link>
+                <Link href="/services/villa-farmhouse" className="text-[var(--color-muted)] text-sm py-1" onClick={() => setIsOpen(false)}>Villa & Farmhouse</Link>
+                <Link href="/services/plot-land-management" className="text-[var(--color-muted)] text-sm py-1" onClick={() => setIsOpen(false)}>Plot / Land Management</Link>
+                <Link href="/services/commercial-property" className="text-[var(--color-muted)] text-sm py-1" onClick={() => setIsOpen(false)}>Commercial Property</Link>
+              </div>
+            )}
+          </div>
+
+          <Link href="/about" className="text-[var(--color-primary)] font-medium" onClick={() => setIsOpen(false)}>About Us</Link>
+          <Link href="/contact" className="text-[var(--color-primary)] font-medium" onClick={() => setIsOpen(false)}>Contact</Link>
+        </div>
+      )}
+    </header>
+  );
+}
